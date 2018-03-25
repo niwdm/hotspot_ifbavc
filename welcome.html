@@ -1,0 +1,207 @@
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="default.css">
+    <script language="javascript">
+      //Function to get param value from URL. 
+                              function getQueryVariable(variable) { 
+                                var query = window.location.search.substring(1); 
+                                var vars = query.split("?"); 
+                                for (var i=0;i<vars.length;i++) {
+                                  var pair = vars[i].split("="); 
+                                  if (pair[0] == variable) {
+                                      if (pair[0] == "Qv") {
+                                          return vars[i].substr(3, vars[i].length);
+                                      }
+                                      return pair[1]; 
+                                  } 
+                                } 
+                                alert('Query Variable ' + variable + ' not found'); 
+                              }
+    </script>
+    <script language="JavaScript">
+      //Function to get param value from URL.
+                              function getQueryVariable(variable) {
+                                      var query = window.location.search.substring(1);
+                                      var vars = query.split("?");
+                                      for (var i=0;i<vars.length;i++) {
+                                              var pair = vars[i].split("=");
+                                              if (pair[0] == variable) {
+                                                  if (pair[0] == "Qv") {
+                                                      return vars[i].substr(3, vars[i].length);
+                                                  }
+                                                  return pair[1];
+                                              }
+                                      }
+                                      alert('Query Variable ' + variable + ' not found');
+                              }
+                              (function() {
+                                  function listenEvent( o, evtType, fn ) {
+                                      if(o.addEventListener) {
+                                          o.addEventListener(evtType, fn, false);
+                                          return true;
+                                      } else if(o.attachEvent) {  // For MSIE
+                                          return o.attachEvent("on"+evtType, fn);
+                                      } else {
+                                          return false;
+                                      }
+                                  }
+                                  // Gets the timeout from the URL
+                                  function getTimeout() {
+                                      var rez = window.location.search.match(/timeout=(\d+)/);
+                                      if(rez&&rez.length==2) {
+                                          return parseInt(rez[1],10)
+                                      }
+                                      return -1;  // No timeout found
+                                  }
+                              
+                                  listenEvent( window, 'load', function() {
+                                      var timeout = getTimeout();
+                                      var txt='', days, hrs, mins, secs, days_str='', hrs_str='', mins_str='', secs_str='';
+                                      if(timeout==0) {
+                                          txt = "Your allotted time has expired.<br/>Please purchase a new voucher.";
+                                      } else {
+                                          if(timeout == -1) {
+                                              txt = "Your session is valid till the expiry date/time on your voucher.";
+                                          } else {
+                                              var seconds_remaining = timeout; // in seconds
+                                              var interval = setInterval(function() {
+                                                  days_str='', hrs_str='', mins_str='', secs_str='';
+                                                  seconds_remaining -= 1;
+                                                  if(seconds_remaining<=0) {
+                                                      clearInterval(interval);
+                                                      txt = '';
+                                                      document.getElementById('txt').innerHTML = txt;
+                                                      alert("Your voucher duration is over. Please buy a new one if required.");
+                                                  } else {
+                                                      days = Math.floor(seconds_remaining/86400.0);
+                                                      hrs = Math.floor((seconds_remaining%86400.0)/3600.0);
+                                                      mins = Math.floor(((seconds_remaining%86400.0)%3600.0)/60);
+                                                      secs = Math.floor(((seconds_remaining%86400.0)%3600.0)%60.0);
+                                                      if(days>0) {
+                                                          days_str = days.toString() + " Days ";
+                                                      }
+                                                      if(hrs>0) {
+                                                          hrs_str = hrs.toString() + " Hrs ";
+                                                      }
+                                                      if(mins>0) {
+                                                          mins_str = mins.toString() + " Minutes ";
+                                                      }
+                                                      if(secs>0) {
+                                                          secs_str = secs.toString() + " Seconds ";
+                                                      }
+                                                      txt = days_str + hrs_str + mins_str + secs_str;
+                                                  }
+                                                  document.getElementById('txt').innerHTML = txt;
+                                              },1000);
+                                          }
+                                      }
+                                      document.getElementById('txt').innerHTML = txt;
+                              
+                                  });
+                              })();
+    </script>
+  </head><body>
+    <nav class="navbar navbar-full navbar-light bg-faded">
+      <ul class="nav navbar-nav pull-right">
+        <li class="nav-item active">
+          <a class="nav-link" href="http://portal.ifba.edu.br/">Portal<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="https://portaldoaluno.ifba.edu.br/scripts/PortalAluno/index.html">Portal do Aluno</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="http://www.biblioteca.ifba.edu.br/pergamum/biblioteca/">Biblioteca</a>
+        </li>
+      </ul>
+    </nav>
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="bootstrap.js"></script>
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="text-xs-center">Hotspot IFBA</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-faded p-y-3 section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-2">
+            <img class="center-block img-fluid" src="logon.jpg">
+          </div>
+          <div class="col-md-4">
+            <h3 class="pi-draggable pi-item text-xs-center">Você está conectado!</h3>
+            <form name="frmLogin" id="frmLogin" action="/cgi-bin/hslogout.cgi" method="POST">
+              <input name="f_hs_server" id="f_hs_server" type="hidden" size="64">
+              <input name="f_Qv" type="hidden" id="f_Qv">
+              <fieldset class="form-group">
+                <h4 class="content-message" style="text-align: center;">Clique para desconectar esta Sessão.</h4>
+                <h4 class="form-text" style="text-align: center;">Tempo restante da Sessão:</h4>
+                <h4 class="form-text" id="txt" style="text-align: left;"></h4>
+              </fieldset>
+              <fieldset class="form-group" style="text-align: center;">
+              <input name="submit" type="submit" value="Deslogar" class="btn btn-success">
+              </fieldset>
+            </form>
+          </div>
+          <div class="col-md-6">
+            <h3 class="pi-draggable pi-item text-xs-center">Notícias</h3>
+            <span>
+              <div class="tile link-externo" id="cb4160d262ca418d9093942aec32f103">
+                <div class="cover-collection-tile">
+                  <div class="collection-item even">
+                    <h4>
+                      <a href="http://portal.ifba.edu.br/instituto-federal/folder/ifba-firma-convenio-com-o-ciee" title="">IFBA firma convênio com o CIEE</a>
+                    </h4>
+                    <div class="visualClear">
+                      <!-- -->
+                    </div>
+                  </div>
+                  <div class="collection-item odd">
+                    <h4>
+                      <a href="http://portal.ifba.edu.br/instituto-federal/labprosaud-adere-ao-sibratec" title="">Labprosaud adere ao Sibratec</a>
+                    </h4>
+                    <div class="visualClear">
+                      <!-- -->
+                    </div>
+                  </div>
+                  <div class="collection-item even">
+                    <h4>
+                      <a href="http://portal.ifba.edu.br/instituto-federal/folder/acao-no-ifba-marca-dia-de-combate-ao-abuso-e-a-exploracao-sexual-no-pais" title="">Ação no IFBA marca dia de combate ao abuso e à exploração sexual no país</a>
+                    </h4>
+                    <div class="visualClear">
+                      <!-- -->
+                    </div>
+                  </div>
+                  <div class="tile-footer">
+                    <a href="http://portal.ifba.edu.br/noticias-pagina-principal">MAIS NOTICIAS...</a>
+                  </div>
+                  <div class="visualClear">
+                    <!-- -->
+                  </div>
+                </div>
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script language="javascript">
+      var hs_server = "NONE";
+                              var port = 880;
+                              var postToUrl = "/cgi-bin/hslogout.cgi";
+                              hs_server = getQueryVariable("hs_server");
+                              Qv = getQueryVariable("Qv");
+                              postToUrl = ":" + port + postToUrl;
+                              
+                              document.getElementById("f_hs_server").value = hs_server
+                              document.getElementById("f_Qv").value = Qv
+                              document.getElementById("frmLogin").action = "http://" + hs_server + postToUrl;
+    </script>
+  
+
+</body></html>
